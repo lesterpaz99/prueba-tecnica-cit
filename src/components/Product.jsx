@@ -11,17 +11,22 @@ function Product({ product, removeProduct, onComplete }) {
 
 	return (
 		<div className='product-container'>
-			<p style={styleCompleted()}>
-				{product.name} - L. {product.price} {product.description}:{' '}
-				{product.state}
-			</p>
-			<input
-				type='checkbox'
-				onChange={() =>
-					onComplete(product.name, product.description, product.state)
-				}
-			/>
-			<button onClick={() => removeProduct(product.name)}>x</button>
+			<div className='product'>
+				<p style={styleCompleted()}>
+					{product.name} - Price: L. {product.price}
+				</p>
+				<p>{product.description}: </p>
+				<div>
+					<p>Activo: {product.state}</p>
+					<input
+						type='checkbox'
+						onChange={() =>
+							onComplete(product.name, product.description, product.state)
+						}
+					/>
+				</div>
+				<button onClick={() => removeProduct(product.name)}>Remove</button>
+			</div>
 		</div>
 	);
 }
