@@ -6,7 +6,9 @@ function Heading() {
 		<header className='bg-gray-800 flex items-center justify-between'>
 			<div className='grid place-items-center pl-4'>
 				<Link to='/home'>
-					<h5 className='text-gray-100 font-bold text-2xl'>Product App</h5>
+					<h5 className='text-gray-100 font-bold text-2xl'>
+						Product App (Home)
+					</h5>
 				</Link>
 			</div>
 			<div className='flex text-right px-4 py-2 m-2'>
