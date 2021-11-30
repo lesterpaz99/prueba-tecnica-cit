@@ -1,9 +1,14 @@
-import React from 'react';
-import './Login.css';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 
 function Login() {
+	const [user, setUser] = useState('admin'); // admin default
+
+	const onUserChange = (e) => {
+		setUser(e.target.value);
+	};
+
 	return (
 		<div className='login-page'>
 			<div className='wrapper'>
@@ -22,6 +27,8 @@ function Login() {
 							className='input-text'
 							type='text'
 							placeholder='Leslie Alexander'
+							onChange={(e) => onUserChange(e)}
+							value={user}
 							required
 						/>
 					</label>
@@ -30,11 +37,12 @@ function Login() {
 						<input
 							className='input-text'
 							type='password'
-							placeholder='At least 8characters'
+							placeholder='At least 8 characters'
+							required
 						/>
 					</label>
-					<Link to='/home'>
-						<input className='input-submit' type='button' value='Log in' />
+					<Link className='input-submit' to='/home'>
+						Log in
 					</Link>
 				</form>
 			</div>

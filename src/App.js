@@ -1,44 +1,61 @@
-import { useState } from 'react';
-import './App.css';
-import importedProducts from './sample/products.json';
-import { Products } from './components/Products';
-import { ProductsForm } from './components/ProductsForm';
+import { useContext, useReducer, useEffect, useState } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
+import { Heading } from './components/Heading';
+import { ProductForm } from './components/ProductForm';
+import { ProductList } from './components/ProductList';
+import { GlobalContext } from './context/GlobalContext';
+import { appReducer } from './context/appReducer';
+import { Login } from './components/Login';
 
 function App() {
-	const [products, setProducts] = useState(importedProducts);
+	const [isInLoginPage, setIsInLoginPage] = useState(true);
+	const { products, username } = useContext(GlobalContext);
+	const [state, dispatch] = useReducer(appReducer, products);
 
-	const updateProducts = (newProduct) => {
-		const updatedProducts = [...products, newProduct];
-		setProducts(updatedProducts);
+	const updateProducts = (type_action, product) => {
+		dispatch({ type: type_action, payload: product });
 	};
 
-	const removeProduct = (name) => {
-		const newProducts = products.filter((product) => product.name !== name);
-		setProducts(newProducts);
-	};
-
-	const onComplete = (name, description, state) => {
-		const updatedProduct = {
-			name,
-			description,
-			// price,
-			// quantity,
-			state: !state,
-		};
-		const productIndex = products.findIndex((product) => product.name === name);
-		products.splice(productIndex, 1, updatedProduct);
-		setProducts([...products]);
-	};
+	const { pathname } = useLocation();
+	useEffect(() => {
+		if (pathname !== '/') {
+			setIsInLoginPage(false);
+		}
+	}, [pathname])
 
 	return (
-		<div className='App'>
-			<ProductsForm updateProducts={updateProducts} />
-			<Products
-				products={products}
-				removeProduct={removeProduct}
-				onComplete={onComplete}
-			/>
-		</div>
+		<>
+			{!isInLoginPage && <Heading />}
+			<div className='text-center text-white mt-10'>
+				<GlobalContext.Provider value={{ state, username }}>
+					<Routes>
+						<Route path='/' element={<Login />} />
+						<Route
+							path='/home'
+							element={<ProductList updateProducts={updateProducts} />}
+						/>
+						<Route
+							path='/add'
+							element={
+								<ProductForm
+									updateProducts={updateProducts}
+									titleForm={'Add Product'}
+								/>
+							}
+						/>
+						<Route
+							path='/edit:id'
+							element={
+								<ProductForm
+									updateProducts={updateProducts}
+									titleForm={'Edit Product'}
+								/>
+							}
+						/>
+					</Routes>
+				</GlobalContext.Provider>
+			</div>
+		</>
 	);
 }
 
